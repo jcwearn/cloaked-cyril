@@ -6,12 +6,6 @@
 import os
 
 files = os.listdir('.') 
-
-def rename( files ):
-
-    for f in files:
+for f in files:
+    if not f.startswith('.'):
 	print f
-    return
-
-rename(files)
-
