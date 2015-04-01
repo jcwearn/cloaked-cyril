@@ -22,9 +22,6 @@ files = os.listdir(path)
 for f in files:
     if not f.startswith('.') and (f.endswith('.avi') or f.endswith('.mp4') or f.endswith('.mkv') or f.endswith('.srt')):
 	if not re.search('s[0-9]?[0-9]e[0-9]?[0-9]',f, re.IGNORECASE):
-	    
-	    replacement = f[0:5] + 's01e' + f[6:]  
-	    print "orig: " + f
-	    print "replacement: " + replacement
-	    #os.rename(f, replacement)
-
+	    idx_re = re.search('[0-9]?[0-9][0-9]',f).start()
+	    replacement = f[0:idx_re] + 's0' + f[idx_re] + 'e' + f[idx_re+1:]  
+	    os.rename(path + f, path + replacement)
