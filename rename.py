@@ -5,21 +5,26 @@
 
 import os
 import sys
-import getopt
+import re
 
-files = os.listdir('.') 
+args = sys.argv
 
-args = str(sys.argv)
-
-if len(args) > 2:
+if not len(args) == 2:
     print "Input Error. Usage: rename.py <path>"
     exit(1)
-path = args[1:]
+
+path = str(args[1:])
+path = path[2:len(path)-2]
 print path
 
+files = os.listdir(path) 
 
 for f in files:
-    if not f.startswith('.') and not f == 'rename.py' and not f == 'rename.py~':
-	replacement = f[0:5] + 's01e' + f[6:]  
-	#os.rename(f, replacement)
+    if not f.startswith('.') and (f.endswith('.avi') or f.endswith('.mp4') or f.endswith('.mkv') or f.endswith('.srt')):
+	if not re.search('s[0-9]?[0-9]e[0-9]?[0-9]',f, re.IGNORECASE):
+	    
+	    replacement = f[0:5] + 's01e' + f[6:]  
+	    print "orig: " + f
+	    print "replacement: " + replacement
+	    #os.rename(f, replacement)
 
