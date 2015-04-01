@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # author: Jackson Wearn
 # description: a small script to rename the files in a directory
-# snippets taken from: http://stackoverflow.com/questions/225735/batch-renaming-of-files-in-a-directory
+# initial idea from: http://stackoverflow.com/questions/225735/batch-renaming-of-files-in-a-directory
 
 import os
 import sys
@@ -15,7 +15,6 @@ if not len(args) == 2:
 
 path = str(args[1:])
 path = path[2:len(path)-2]
-print path
 
 files = os.listdir(path) 
 
