@@ -62,27 +62,53 @@ for file in filelist:
 	filelist.remove(file)
 	delete_count = delete_count + 1
 
-# decide whether files/dirs to be updated are Movie or TV
-if isMovie:
-    print "Do movie updates here"
-else:
-    print "Do TV updates here"
+# returns the number of digits for a number
+def numDigits (num):
+    return len(str(num))
 
-def updateTV (filelist, dirlist):
+def updateTV (fileList, dirList):
+    print "we in this shit"
+    count = 0
     for file in filelist: # loop through directory list (files)
-	# check that file doesn't already follow the correct format [s[0-9]e[0-9]]
-	if not re.search('s[0-9]?[0-9]e[0-9]?[0-9]',file, re.IGNORECASE):
-	    # index of first digit of 3 digit number (e.g. rome.hdtv.101.avi  : '101')
-	    idx_re = re.search('[0-9]?[0-9][0-9]',file).start() # this number determines what season the episode is in
-	    replacement = file[0:idx_re] + 's0' + file[idx_re] + 'e' + file[idx_re+1:]  # piece string together with correct format
-	    #os.rename(path + f, path + replacement) # replace the original with the new file name
-	    count = count + 1 # increment to track how many files are updated
+	# numbersInPath is a list of the numbers that appear in path
+	# for now the only number that matters is the first one
+	#
+	# case 1: if it is 1 digit that means it is of the form Ep. d1 (E.g. Ep. 1)
+	# case 2: if it is 2 digits that means it is of the form Ep. d1d2 (E.g. Ep. 01)
+	# case 3: if it is 3 digits that means it is of the form d1d2d3 (E.g. 101 - meaning season 1 episode 1)
+	numbersInPath = re.findall(r"\b[\d]+\b",file)	    
+	case = numDigits(numbersInPath[0])
+
+	if case == 1:
+	    print "There is 1 digit"
+	elif case == 2:
+	    print "There are 2 digits"
+	elif case == 3:
+	    print "There are 3 digits"
+	    # check that file doesn't already follow the correct format [s[0-9]e[0-9]]
+	    if not re.search('s[0-9][0-9]e[0-9]?[0-9]',file, re.IGNORECASE):
+		# index of first digit of 3 digit number (e.g. rome.hdtv.101.avi  : '101')
+		idx_re = re.search('[0-9][0-9][0-9]',file).start() # this number determines what season the episode is in
+		replacement = file[0:idx_re] + 's0' + file[idx_re] + 'e' + file[idx_re+1:]  # piece string together with correct format
+		#os.rename(path + f, path + replacement) # replace the original with the new file name
+		count = count + 1 # increment to track how many files are updated
+    return count
+
+
 
 def updateMovie (filelist, dirlist):
     for file in filelist:
 	# check that file doesn't already follow the correct format [s[0-9]e[0-9]]
 	if not re.search('s[0-9]?[0-9]e[0-9]?[0-9]',file, re.IGNORECASE):
 	    print "Update that shit"
+
+# decide whether files/dirs to be updated are Movie or TV
+if isMovie:
+    print "Do movie updates here"
+else:
+    print "Do TV updates here"	    
+    rename_count = updateTV(filelist, dirlist)
+
 
 print "\n"
 print "Finished: " + str(rename_count) + " file(s) updated; " + str(delete_count) + " file(s) deleted"
