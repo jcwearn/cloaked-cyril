@@ -67,18 +67,23 @@ def numDigits (num):
     return len(str(num))
 
 def updateTV (fileList, dirList):
-    print "we in this shit"
     count = 0
     for file in filelist: # loop through directory list (files)
 	# numbersInPath is a list of the numbers that appear in path
 	# for now the only number that matters is the first one
 	#
 	# case 1: if it is 1 digit that means it is of the form Ep. d1 (E.g. Ep. 1)
-	# case 2: if it is 2 digits that means it is of the form Ep. d1d2 (E.g. Ep. 01)
+	# case 2: if it is 2 digits that means it is of the form Ep. d1d2 (E.g. Ep. 01) 
+
+	# case 1 and 2 can be combined
+	#
 	# case 3: if it is 3 digits that means it is of the form d1d2d3 (E.g. 101 - meaning season 1 episode 1)
+	#
+	# note: file contains the full path; not just the file name
 	numbersInPath = re.findall(r"\b[\d]+\b",file)	    
 	case = numDigits(numbersInPath[0])
 
+	# if case == 1 or case == 2 then check the path for whcih season it is to make the proper update. 
 	if case == 1:
 	    print "There is 1 digit"
 	elif case == 2:
@@ -106,7 +111,6 @@ def updateMovie (filelist, dirlist):
 if isMovie:
     print "Do movie updates here"
 else:
-    print "Do TV updates here"	    
     rename_count = updateTV(filelist, dirlist)
 
 
